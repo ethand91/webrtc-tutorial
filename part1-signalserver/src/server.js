@@ -11,18 +11,17 @@ const { WebSocketServer, OPEN } = require('ws');
 
 const app = express();
 
-const createHttpsServer = () => {
-  return createServer({
-    cert: readFileSync(resolve(__dirname, './../ssl/cert.pem')),
-    key: readFileSync(resolve(__dirname, './../ssl/cert.key'))
-  });
-};
-
-const appServer = createHttpsServer().listen(3000);
+const appServer = createServer({
+  cert: readFileSync(resolve(__dirname, './../ssl/cert.pem')),
+  key: readFileSync(resolve(__dirname, './../ssl/cert.key'))
+}, app).listen(3000);
 
 app.use(express.static(resolve(__dirname, './../public')));
 
-const wsServer = createHttpsServer();
+const wsServer = createServer({
+  cert: readFileSync(resolve(__dirname, './../ssl/cert.pem')),
+  key: readFileSync(resolve(__dirname, './../ssl/cert.key'))
+});
 const wss = new WebSocketServer({ server: wsServer });
 
 wss.on('connection', (socket) => {
