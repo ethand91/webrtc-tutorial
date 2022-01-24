@@ -1,6 +1,7 @@
 const localVideo = document.getElementById('localVideo');
 const remoteVideo = document.getElementById('remoteVideo');
 const callButton = document.getElementById('callButton');
+const hangupButton = document.getElementById('hangupButton');
 const socket = new WebSocket('wss://localhost:8888');
 
 let peerConnection;
@@ -54,6 +55,7 @@ socket.onerror = (error) => {
 
 socket.onclose = () => {
   console.log('socket::close');
+  stop();
 };
 
 const sendSocketMessage = (action, data) => {
@@ -91,6 +93,22 @@ const call = async () => {
   }
 };
 
+const hangup = () => socket.close();
+
+const stop = () => {
+  if (!localVideo.srcObject) return;
+
+  for (const track of localVideo.srcObject.getTracks()) {
+    track.stop();
+  }
+
+  peerConnection.close();
+  callButton.disabled = true;
+  hangupButton.disabled = true;
+  localVideo.srcObject = undefined;
+  remoteVideo.srcObject = undefined;
+};
+
 const getLocalMediaStream = async () => {
   try {
     const mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
@@ -118,6 +136,11 @@ const initializePeerConnection = async (mediaTracks) => {
 
   peerConnection.oniceconnectionstatechange = () => {
     console.log('peerConnection::iceconnectionstatechange newState=', peerConnection.iceConnectionState);
+    // If ICE state is disconnected stop
+    if (peerConnection.iceConnectionState === 'disconnected') {
+      alert('Connection has been closed stopping...');
+      stop();
+    }
   };
 
   peerConnection.ontrack = ({ track }) => {
@@ -129,4 +152,6 @@ const initializePeerConnection = async (mediaTracks) => {
   for (const track of mediaTracks) {
     peerConnection.addTrack(track);
   }
+
+  hangupButton.disabled = false;
 };

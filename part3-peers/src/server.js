@@ -81,7 +81,6 @@ const emitMessage = (socket, jsonMessage) => {
 const getSocketById = (socketId) =>
   Array.from(wss.clients).find((client => client.id === socketId));
 
-appServer.listen(3000);
 wsServer.listen(8888);
 console.log('app server listening on port 3000');
 console.log('wss server listening on port 8888');
