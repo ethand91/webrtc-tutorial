@@ -139,7 +139,7 @@ const initializePeerConnection = async (mediaTracks) => {
     // If ICE state is disconnected stop
     if (peerConnection.iceConnectionState === 'disconnected') {
       alert('Connection has been closed stopping...');
-      stop();
+      socket.close();
     }
   };
 
