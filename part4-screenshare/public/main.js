@@ -100,7 +100,12 @@ const stop = () => {
   if (!localVideo.srcObject) return;
 
   for (const track of localVideo.srcObject.getTracks()) {
+    console.log('stop track', track);
     track.stop();
+  }
+
+  for (const sender of peerConnection.getSenders()) {
+    sender.track.stop();
   }
 
   peerConnection.close();
