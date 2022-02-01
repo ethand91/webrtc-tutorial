@@ -111,8 +111,8 @@ const stop = () => {
     sender.track.stop();
   }
 
-  peerConnection.close();
   dataChannel.close();
+  peerConnection.close();
   callButton.disabled = true;
   hangupButton.disabled = true;
   screenShareButton.disabled = true;
