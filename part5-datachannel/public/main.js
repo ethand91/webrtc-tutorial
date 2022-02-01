@@ -176,11 +176,7 @@ const initializePeerConnection = async (mediaTracks) => {
 };
 
 const initializeDataChannel = () => {
-  const config = {
-    ordered: true,
-    maxPacketLifeTime: 5000,
-    maxRetansmits: 5
-  };
+  const config = { ordered: true };
 
   dataChannel = peerConnection.createDataChannel('dataChannel', config);
   initializeDataChannelListeners();
