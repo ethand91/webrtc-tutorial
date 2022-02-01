@@ -250,4 +250,5 @@ const sendMessage = () => {
   };
 
   dataChannel.send(JSON.stringify(data));
+  document.getElementById('chatMessage').value = '';
 };
